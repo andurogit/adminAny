@@ -1,0 +1,86 @@
+
+ 
+buildscript {  
+    ext {
+        springBootVersion = '2.3.1.RELEASE'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.3.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+	id 'war'
+}
+
+group = 'com.adm'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+    implementation 'javax.servlet:jstl:1.2'
+    implementation 'org.glassfish.web:el-impl:2.1.2-b05'
+    //implementation 'org.hibernate:hibernate-validator:4.3.2.Final'
+    //implementation 'com.eyeq:kona-engine:5.0-SNAPSHOT'
+    //implementation 'org.springframework:spring-webmvc:4.3.16.RELEASE'
+	compile group: 'org.springframework', name: 'spring-webmvc', version: '5.2.7.RELEASE'
+    // implementation 'org.springframework:spring-websocket:4.3.16.RELEASE' -> webmvc 에 귀속
+    // implementation 'org.springframework.security:spring-security-messaging:4.2.5.RELEASE' // core 는 starter-web 에 포함 나머지는 webmvc 에 포함
+    // implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.5' // starter-web 에 포함
+
+	compile "org.springframework.boot:spring-boot-configuration-processor"
+
+    implementation 'com.github.oshi:oshi-core:3.4.4'
+    implementation 'com.github.oshi:oshi-json:3.4.4'
+
+	// compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0' // starter web 에 포함되어있는데?
+	//compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
+    implementation 'org.apache.commons:commons-lang3:3.6'
+    compile group: 'org.apache.directory.studio', name: 'org.apache.commons.lang', version: '2.6'
+
+    // orm mybatis
+    compile group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.0.1'
+
+    // spring boot security
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.3.0.RELEASE'
+
+
+	// 일단 현재로선 필요 없으므로 제거
+    // testImplementation 'org.powermock:powermock-module-junit4:1.7.3'
+    // testImplementation 'org.powermock:powermock-module-junit4-rule-agent:1.7.3'
+    // testImplementation 'org.powermock:powermock-api-mockito:1.7.3'
+
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    providedCompile 'javax.el:el-api:2.1.2-b05'
+    providedCompile 'org.projectlombok:lombok:1.16.10'
+
+	// boot basic
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
