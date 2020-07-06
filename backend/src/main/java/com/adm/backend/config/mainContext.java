@@ -2,6 +2,7 @@ package com.adm.backend.config;
 
 import com.adm.backend.context.AdminPropertyEditorRegistrar;
 import com.adm.backend.context.AdminPropertyOverrideConfigurer;
+import com.zaxxer.hikari.HikariDataSource;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -12,7 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * 빈 등록은 했는데 
@@ -30,6 +32,7 @@ class="org.springframework.beans.factory.config.CustomEditorConfigurer">
 </bean> */
 
 @Configuration
+@EnableTransactionManagement // <tx:annotation-driven transaction-manager="transactionManager"/>
 public class mainContext {
     private static final Logger log = LoggerFactory.getLogger(mainContext.class);
     
@@ -69,15 +72,58 @@ public class mainContext {
         // return new CustomEditorConfigurer();
     }
 
-    //프로퍼티 파일 찾기
+    
     /**
+     * 프로퍼티 파일 찾기
      * 해당 프로퍼티 컨피거에 admin.properties ( classpath 에 있는 것 )
-     * 정보를 생성자로 던진다 생성자는 Resourcep[] 형태이다.
+     * 정보를 생성자로 던진다 생성자는 Resource[] 형태이다.
      * 생성자에 파라미터로 넣을 때는 이렇게
+     * 프로퍼티가 더 있어서 변경 함
      */
     @Bean(name = "propertyConfigurer")
     public AdminPropertyOverrideConfigurer propertyConfigurer(Resource[] resource) {
+        AdminPropertyOverrideConfigurer adminPropertyOverrideConfigurer = new AdminPropertyOverrideConfigurer((Resource[]) ArrayUtils.add((Object[]) resource, (Object) new ClassPathResource("admin.properties")));
+
+        adminPropertyOverrideConfigurer.setIgnoreResourceNotFound(true);
+
+        adminPropertyOverrideConfigurer.setIgnoreInvalidKeys(true);
+
+        return adminPropertyOverrideConfigurer;
         
-        return new AdminPropertyOverrideConfigurer((Resource[]) ArrayUtils.add((Object[]) resource, (Object) new ClassPathResource("admin.properties")));
+        //return new AdminPropertyOverrideConfigurer((Resource[]) ArrayUtils.add((Object[]) resource, (Object) new ClassPathResource("admin.properties")));
     }
+
+    /**
+     * Data Source
+     * ??? 프로퍼티로 만들어서 던저야 되나?
+     * ClientDriver 가 없네 
+     */
+    @Bean(name = "dataSource")
+    public HikariDataSource dataSource() {
+        HikariDataSource dataSource = new HikariDataSource();
+        //Properties props = new Properties();
+        //props.setProperty("driverClassName", "org.apache.derby.jdbc.ClientDriver");
+        dataSource.setDriverClassName("org.apache.derby.jdbc.ClientDriver");
+        dataSource.setJdbcUrl("jdbc:derby://localhost:1527/admin;create=true");
+        dataSource.setMinimumIdle(3);
+        dataSource.setConnectionTestQuery("values (1)");
+        dataSource.setMaximumPoolSize(30);
+        dataSource.setRegisterMbeans(true);
+        return dataSource;
+    }
+
+    /**
+     * Transaction manager 
+     */
+    @Bean(name = "transactionManager")
+    public DataSourceTransactionManager transactionManager() {
+
+        return new DataSourceTransactionManager(dataSource());
+    }
+
+    /**
+     * as-is ibatis SqlMap Support 
+     */
+    //@Bean(name = "sqlMapClinet")
+    
 } 

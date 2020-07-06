@@ -34,9 +34,10 @@ public class AdminPropertyOverrideConfigurer extends PropertyOverrideConfigurer 
     private File getAdminPropertiesPath() {
         // -Dadmin.home = ... 으로 구동 시키지 않는 이상 home 은 null 이다.
         String home = System.getProperty("admin.home");
+        log.info("String with listener : " + home);
         File path = null;
         if (StringUtils.isEmpty((CharSequence)home)) {
-            log.info("System property 'kona.home' is not set. Skipping property override.");
+            log.info("System property 'admin.home' is not set. Skipping property override.");
         } else {
             StringBuffer buffer = new StringBuffer();
             buffer.append(home); 
