@@ -8,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 
+@Component
 public class adminApplicationListener implements ApplicationListener<ApplicationStartingEvent>{
     private static final Logger log = LoggerFactory.getLogger(adminApplicationListener.class);
 
@@ -65,7 +67,7 @@ public class adminApplicationListener implements ApplicationListener<Application
         log.info("TOGA Admin home directory : {}", (Object)System.getProperty("admin.home"));
         this.setupOsCacheProperty();
         log.debug("Servlet context listener has been initialized.");
-		
+		System.out.println("test");
 	}
 
 }

@@ -34,7 +34,7 @@ public class AdminPropertyOverrideConfigurer extends PropertyOverrideConfigurer 
     private File getAdminPropertiesPath() {
         // -Dadmin.home = ... 으로 구동 시키지 않는 이상 home 은 null 이다.
         String home = System.getProperty("admin.home");
-        log.info("String with listener : " + home);
+        log.info("TOGA Admin home directory : {}", (Object)System.getProperty("admin.home"));
         File path = null;
         if (StringUtils.isEmpty((CharSequence)home)) {
             log.info("System property 'admin.home' is not set. Skipping property override.");
@@ -44,7 +44,7 @@ public class AdminPropertyOverrideConfigurer extends PropertyOverrideConfigurer 
             if(!home.endsWith(File.separator)) {  // File.separator = / 로 끝나지 않으면 끝에 / 추가
                 buffer.append(File.separator);
             }
-            buffer.append("ADMIN.properties");
+            buffer.append("admin.properties");
             path = new File(buffer.toString());
             log.info("Loading user configuration file from {}", (Object)path.getPath());
         }
@@ -70,7 +70,7 @@ public class AdminPropertyOverrideConfigurer extends PropertyOverrideConfigurer 
         String[] beanNames;
         Enumeration<?> names = props.propertyNames();
         while (names.hasMoreElements()) {
-            String[] key = (String[]) names.nextElement();
+            String key = (String)names.nextElement();
             try {
                 this.processKey(benaFactoryToProcess, (String) key.toString(), props.getProperty((String) key.toString()));
             }

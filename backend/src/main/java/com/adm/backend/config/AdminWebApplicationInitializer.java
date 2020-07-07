@@ -3,10 +3,12 @@ package com.adm.backend.config;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-import com.adm.backend.listener.adminApplicationListener;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.request.RequestContextListener;
 
 /**
  * Wrong Way
@@ -15,11 +17,13 @@ import org.springframework.web.WebApplicationInitializer;
  */
 @Configuration
 public class AdminWebApplicationInitializer implements WebApplicationInitializer{
+	private static final Logger log = LoggerFactory.getLogger(AdminWebApplicationInitializer.class);
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		servletContext.addListener(adminApplicationListener.class);
+		log.info("Listener Add");
+		servletContext.addListener(ContextLoaderListener.class);
+		servletContext.addListener(RequestContextListener.class);
 	}
 
-    
 }

@@ -31,6 +31,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+    maven { url "https://code.lds.org/nexus/content/groups/main-repo"}
 }
 
 dependencies {
@@ -82,7 +83,10 @@ dependencies {
     //testCompile group: 'org.apache.derby', name: 'derby', version: '10.5.3.0'
     compile group: 'org.apache.derby', name: 'derbyclient', version: '10.11.1.1'
     //jansi
-    compile group: 'org.fusesource.jansi', name: 'jansi', version: '1.8'
+    compile group: 'org.fusesource.jansi', name: 'jansi', version: '1.8'    
+    //ojdbc
+    //compile 'com.oracle:ojdbc6:11.2.0.3'
+    compile files('lib/ojdbc14.jar')
 
 }
 
