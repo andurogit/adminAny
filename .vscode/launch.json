@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - AnyAdminApplication",
+            "request": "launch",
+            "mainClass": "com.adm.backend.AnyAdminApplication",
+            "projectName": "backend"
+        },
+        {
+            "type": "java",
             "name": "Debug (Launch) - Current File",
             "request": "launch",
             "mainClass": "${file}"

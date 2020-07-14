@@ -17,6 +17,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 	id 'war'
+    //id 'jar'
 }
 
 group = 'com.adm'
