@@ -88,6 +88,8 @@ dependencies {
     //ojdbc
     //compile 'com.oracle:ojdbc6:11.2.0.3'
     compile files('lib/ojdbc14.jar')
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group: 'org.apache.tomcat', name: 'tomcat-jdbc', version: '9.0.37'
 
 }
 

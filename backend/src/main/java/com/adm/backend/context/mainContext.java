@@ -1,7 +1,5 @@
-package com.adm.backend.config;
+package com.adm.backend.context;
 
-import com.adm.backend.context.AdminPropertyEditorRegistrar;
-import com.adm.backend.context.AdminPropertyOverrideConfigurer;
 import com.zaxxer.hikari.HikariDataSource;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -17,9 +15,13 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * 빈 등록은 했는데 
- * customEditorConfigurer 이건 뭔고하니
- * 스프링 프로퍼티 에디터
+ * 메인 컨텍스트 
+ * 사용 할 빈들 등록
+ * 
+ * 빈
+ * 1. customEditorConfigurer ( 스프링 프로퍼티 에디터 )
+ * 2. propertyConfigurer ( 프로퍼티 파일 찾기 )
+ * 3. dataSource ( dabase 연결 소스 )
  */
 /* 
 <bean id="customEditorConfigurer"

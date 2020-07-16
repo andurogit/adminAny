@@ -10,34 +10,16 @@ import org.springframework.boot.context.event.ApplicationStartingEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+/**
+ * 디렉토리 설정
+ * ADMIN_HOME 이 있을경우 설정값에 따르고
+ * 아닐 경우 .admin 으로 생성 함 
+ * 해당 메소드는 폴더명칭을 설정 함. 
+ * admin.home -> property
+ */
 @Component
 public class adminApplicationListener implements ApplicationListener<ApplicationStartingEvent>{
     private static final Logger log = LoggerFactory.getLogger(adminApplicationListener.class);
-
-	// @Override
-	// public void contextInitialized(ServletContextEvent sce) {
-    //     // JANSI
-    //     AnsiConsole.systemInstall();
-    //     System.setProperty("jcl.isolateLogging", "false");
-    //     System.setProperty("togaSystem.name", "toga-admin");
-    //     this.setupAdminHomeProperty();
-    //     log.info("TOGA Admin home directory : {}", (Object)System.getProperty("kona.home"));
-    //     this.setupOsCacheProperty();
-    //     log.debug("Servlet context listener has been initialized.");
-	// }
-
-	// @Override
-	// public void contextDestroyed(ServletContextEvent sce) {
-		
-	// }
-    
-    /**
-     * 디렉토리 설정
-     * ADMIN_HOME 이 있을경우 설정값에 따르고
-     * 아닐 경우 .admin 으로 생성 함 
-     * 해당 메소드는 폴더명칭을 설정 함. 
-     * admin.home -> property
-     */
 
     private void setupAdminHomeProperty() {
         String adminHome = System.getenv("ADMIN_HOME");
@@ -54,7 +36,7 @@ public class adminApplicationListener implements ApplicationListener<Application
     private void setupOsCacheProperty() {
         String propertiesFilePath = System.getProperty("admin.home") + File.separator + "admin-oscache.properties";
         System.setProperty("cachePropertiesFilePath", propertiesFilePath);
-        String cachePath = System.getProperty("kona.home") + File.separator + "temp" + File.separator + "admin-cache";
+        String cachePath = System.getProperty("admin.home") + File.separator + "temp" + File.separator + "admin-cache";
         System.setProperty("togaCachePath", cachePath);
     }
 
@@ -62,12 +44,11 @@ public class adminApplicationListener implements ApplicationListener<Application
 	public void onApplicationEvent(ApplicationStartingEvent event) {
         AnsiConsole.systemInstall();
         System.setProperty("jcl.isolateLogging", "false");
-        System.setProperty("togaSystem.name", "toga-admin");
+        System.setProperty("adminSystem.name", "any-admin");
         this.setupAdminHomeProperty();
-        log.info("TOGA Admin home directory : {}", (Object)System.getProperty("admin.home"));
+        log.info("AdminAny home directory : {}", (Object)System.getProperty("admin.home"));
         this.setupOsCacheProperty();
         log.debug("Servlet context listener has been initialized.");
-		System.out.println("test");
 	}
 
 }

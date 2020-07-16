@@ -13,6 +13,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
  * AdminPropertyEditorRegistrar
  * 프로퍼티 등록관
  * 스프링 프로퍼티 편집기
+ * maincContext 에서 사용
  */
 public class AdminPropertyEditorRegistrar implements PropertyEditorRegistrar{
     private String datePattern = "yyyy/MM/dd hh:mm:ss";
