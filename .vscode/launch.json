@@ -6,6 +6,12 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Debug (Launch)",
+            "request": "launch",
+            "mainClass": ""
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - AnyAdminApplication",
             "request": "launch",
             "mainClass": "com.adm.backend.AnyAdminApplication",
@@ -17,13 +23,7 @@
             "request": "launch",
             "mainClass": "${file}"
         },
-        {
-            "type": "java",
-            "name": "Debug (Launch)-DemoApplication<backend>",
-            "request": "launch",
-            "mainClass": "com.adm.backend.DemoApplication",
-            "projectName": "backend"
-        },
+       
         {
             "type": "java",
             "name": "Debug (Launch)-ProcessTest<backend>",

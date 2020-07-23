@@ -1,0 +1,428 @@
+@startuml
+
+title  < MainContext -> sqlMapClient bean > ConfigurableSqlMapClientFactoryBean class
+
+
+' DataModel ( interface )
+' --- DataModel --- start
+java.io.Serializable <-- DataModel
+
+' SerializeUtils
+SerializeUtils *-- base64 : use
+
+' MartTable ( model )
+DataModel <|-- MartTable
+MetaData *-- MartTable : use
+MartStatus *-- MartTable : use
+SerializeUtils *-- MartTable : use
+
+' MetaData ( model )
+DataModel <|-- MetaData
+MetaDataStatus *-- MetaData : use
+JDBCResource *-- MetaData : use
+SerializeUtils *-- MetaData : use
+
+' MetaDataItem ( model )
+TableColumn <|-- MetaDataItem
+ObjectDetail *-- MetaDataItem : use
+MetaData *-- MetaDataItem : use
+SerializeUtils *-- MetaDataItem : use
+
+' AbstractCode 
+DataModel <|-- AbstractCode
+
+' ObjectDetail ( model )
+AbstractCode <|-- ObjectDetail
+ObjectMaster *-- ObjectDetail : use
+
+' ObjectMaster ( model )
+AbstractCode <|-- ObjectMaster
+
+' --- DataModel --- end
+
+' --- Resource ---- start
+DataModel <|-- Resource
+ResourceType *-- Resource : use
+
+' ResourceType ( enum )
+JCOUtils *-- ResourceType : use
+
+' AbstractResource ( abstract class )
+Resource <|-- AbstractResource
+SerializeUtils *-- AbstractResource : use
+
+' JDBCResource 
+AbstractResource <|-- JDBCResource
+DatabaseType *-- JDBCResource : use
+SerializeUtils *-- JDBCResource : use
+
+' DatabaseType ( enum )
+SQLDialect *-- DatabaseType : use
+
+' --- Resource --- end
+
+' SQLDialect ( interface ) --- start
+' SQLDialect
+SQLDialect *-- MartTable : use
+SQLDialect *-- MartTableItem : use
+SQLDialect *-- MetaData : use
+SQLDialect *-- MetaDataItem : use
+SQLDialect *-- DatabaseMetaData : use
+
+' --- SQLDialect --- end
+
+' AbstractSQLDialect ( abstract class ) --- start
+SQLDialect <|-- AbstractSQLDialect
+MartStatus *-- AbstractSQLDialect : use
+MartTable *-- AbstractSQLDialect : use
+MartTableItem *-- AbstractSQLDialect : use
+IllegalMartStatusException *-- AbstractSQLDialect : use
+ItemType *-- AbstractSQLDialect : use
+MetaDataStatus *-- AbstractSQLDialect : use
+TableColumn *-- AbstractSQLDialect : use
+DatabaseMetaData *-- AbstractSQLDialect : use
+MetaData *-- AbstractSQLDialect : use
+MetaDataItem *-- AbstractSQLDialect : use
+
+' OracleDialect
+AbstractSQLDialect <|-- OracleDialect
+apache.common.dbcp.DelegatingCallableStatement *-- OracleDialect : use
+java.sql.CallableStatement *-- OracleDialect : use
+
+' SQLServerDialect
+AbstractSQLDialect <|-- SQLServerDialect
+java.sql.CallableStatement *-- SQLServerDialect : use 
+
+' DB2Dialect
+AbstractSQLDialect <|-- DB2Dialect
+java.sql.CallableStatement *-- DB2Dialect : use
+
+' DB2V8Dialect
+AbstractSQLDialect <|-- DB2V8Dialect
+java.sql.CallableStatement *-- DB2V8Dialect : use
+
+' DB2As400Dialect
+AbstractSQLDialect <|-- DB2V8Dialect
+
+' DB2V8As400Dialect
+DB2Dialect <|-- DB2V8As400Dialect
+
+' DB2V8Dialect 
+DB2Dialect <|-- DB2V8Dialect
+
+' DerbyDialect
+AbstractSQLDialect <|-- DerbyDialect
+TableColumn *-- DerbyDialect : use
+
+' HDBDialect
+AbstractSQLDialect <|-- HDBDialect
+org.apache.ddlutils.PlatformFactory *-- HDBDialect : use
+TableColumn *-- HDBDialect : use
+SAPHanaDBPlatform *-- HDBDialect : use
+
+' AltibaseDialect
+OracleDialect <|-- AltibaseDialect
+
+' SybaseDialect
+SQLServerDialect <|-- SybaseDialect
+
+' IllegalMartStatusException ( model )
+RuntimeException <|-- IllegalMartStatusException
+MartTable *-- IllegalMartStatusException : use
+
+' IllegalMetaDataStatusException ( model )
+RuntimeException <|-- IllegalMetaDataStatusException
+MetaData *-- IllegalMetaDataStatusException : use
+
+' AbstractSQLDialect --- end
+
+' TableColumn (abstract class) --- start
+TableColumn <|-- DataModel
+ColumnType *-- TableColumn : use
+
+' MartTableItem ( model )
+' Criteria 용도파악필요
+TableColumn <|-- MartTableItem
+MartTable *-- MartTableItem
+ItemType *-- MartTableItem
+Criteria *-- MartTableItem 
+ClauseType *-- MartTableItem 
+
+' --- TableColumn --- end
+
+' DelegatingLobHandler ( interface ) --- start
+springframework.LobHandler <|-- DelegatingLobHandler
+SQLDialect *-- DelegatingLobHandler : use
+
+' --- DelegatingLobHandler --- end
+
+
+' ExtensionSupport ( interface ) --- start
+
+' SqlMapClientExtension
+ExtensionSupport <|-- SqlMapClientExtension
+springframework.io.Resource *-- SqlMapClientExtension : use 
+org.w3c.dom.Document *-- SqlMapClientExtension : use
+
+' --- ExtensionSupport --- end
+
+' SqlMapClientExtension
+
+
+' ConfigurableSqlMapClientFactoryBean 시작점
+org.mybatis.spring.SqlSessionFactoryBean <|-- ConfigurableSqlMapClientFactoryBean
+java.sql.DataSource *-- ConfigurableSqlMapClientFactoryBean : use 
+DelegatingLobHandler *-- ConfigurableSqlMapClientFactoryBean : use 
+springframework.ApplicationContext *-- ConfigurableSqlMapClientFactoryBean : use 
+org.w3c.dom.Document *-- ConfigurableSqlMapClientFactoryBean : use 
+org.w3c.dom.Element *-- ConfigurableSqlMapClientFactoryBean : use 
+org.w3c.dom.Node *-- ConfigurableSqlMapClientFactoryBean : use 
+org.w3c.dom.NodeList *-- ConfigurableSqlMapClientFactoryBean : use 
+SqlMapClientExtension *-- ConfigurableSqlMapClientFactoryBean : use 
+java.util.Properties *-- ConfigurableSqlMapClientFactoryBean : use 
+OSCacheController *-- ConfigurableSqlMapClientFactoryBean : use 
+
+
+' OSCacheController
+com.ibatis.sqlmap.engine.cache.CacheController <|-- OSCacheController
+com.opensymphony.oscache.general.GeneralCacheAdministrator *-- OSCacheController
+
+' *******
+' sources
+' *******
+
+class OSCacheController {
+    public GeneralCacheAdministrator;
+}
+
+class SqlMalClientExtension {
+    public Document getConfigurationFragment();
+
+}
+
+class ConfigurableSqlMapClientFactoryBean {
+    public setDataSource(DataSource dataSource);
+    public setLobHandler(LobHandler lobHandler);
+    protected getConfigurationFragments();
+    public mergeCustomConfigurationFragments(Document document, List<Document> fragments);
+    protected buildSqlMapClient(Resource[] configLocations, Resource[] mappingLocations, Properties properties)
+}
+
+
+interface DelegatingLobHandler {
+    getDialect();
+}
+
+class IllegalMetaDataStatusException <<model>> {}
+class IllegalMartStatusException <<model>> {}
+
+abstract AbstractSQLDialect {
+    getPreferredPlatformName();
+    createSqlSyntaxByMartData(MartTable table, List<MartTableItem> items);
+    createSqlSyntaxByMetaData(MetaData data, List<MetaDataItem> items);
+    getLobHandler(DatabaseMetaData info);
+    getCallableStatementResultSetType();
+    getExecuteCallableStatementWithResultSet(CallableStatement cs, int index);
+}
+
+class ObjectMaster <<model>> {
+    equals();
+}
+
+class ObjectDetail <<model>> {
+    public static final String CODE_ORGANIZATION = "C001";
+    public static final String CODE_CHANNEL = "C002";
+    public static final String CODE_PRODUCT = "C003";
+    private ObjectMaster objectMaster;
+    private String userKey1 = "";
+    private String stringInitValue = "";
+    private int numberInitValue = 0;
+    private String filePath = "";  
+}
+
+abstract class AbstractCode {
+    private String code;
+    private String name;
+    private Boolean enabled = true;    
+}
+
+class MetaDataItem <<model>> {
+    private ObjectDetail codeLink;
+    private MetaData parent;
+    private int seq;
+}
+
+enum Criteria{}
+
+enum ClauseType {
+    AND("AND"),
+    OR("OR");
+    
+    private String code;
+}
+
+enum ItemType {
+    GROUP_BY("GI"),
+    SUM("SI"),
+    CONDITION("CI");
+    
+    private String code;
+}
+enum  ColumnType {
+    NUMERIC("NUM"),
+    VARCHAR("CHA"),
+    DATE("DAT"),
+    BLOB("BLO"),
+    CLOB("CLO");
+    
+    private String code;
+}  
+
+abstract class TableColumn <<cloneable>> {
+    private String id;
+    private String name;
+    private String localizedName;
+    private int length;
+    private String description;
+    private ColumnType dataType;
+}
+
+class MartTableItem <<modle>> {
+    private MartTable parent;
+    private String itemLink;
+    private ItemType type = ItemType.GROUP_BY;
+    private Criteria criteria = Criteria.EQUALS;
+    private ClauseType clause = ClauseType.AND;
+    private String conditionValue;
+    private String expression;
+}
+
+enum MartStatus {
+    PENDING("Y"),
+    COMPLETED("E");
+    
+    private String flag;
+}
+
+class base64
+
+class SerializeUtils
+
+interface DataModel <<Serializable>>
+
+interface SQLDialect {
+    public String getPreferredPlatformName();
+    public String getName();
+    public String createSqlSyntaxByMartData(MartTable var1, List<MartTableItem> var2);
+    public String createSqlSyntaxByMetaData(MetaData var1, List<MetaDataItem> var2);
+    public String getNullCheckFunction(String var1, String var2);
+    public String getDriverClassName();
+    public String getUrl();
+    public String getValidationQuery();
+    public String getSQLOverridePath();
+    public int getCallableStatementResultSetType();
+    public ResultSet getExecuteCallableStatementWithResultSet(CallableStatement var1, int var2) throws SQLException;
+    public boolean supports(DatabaseMetaData var1) throws SQLException;
+    public boolean supports(String var1) throws SQLException;
+    public LobHandler getLobHandler(DatabaseMetaData var1) throws SQLException;    
+}
+
+enum DatabaseType {
+    ORACLE("OR", "Oracle", new OracleDialect()),
+    SQLSERVER("SS", "Microsoft SQLServer", new SQLServerDialect()),
+    SYBASE("SY", "Sybase ASE", new SybaseDialect()),
+    DB2("D2", "DB2", new DB2Dialect()),
+    DB2V8("D8", "DB2V8", new DB2V8Dialect()),
+    DB2As400("DA", "DB2As400", new DB2As400Dialect()),
+    DB2V8As400("A8", "DB2V8As400", new DB2V8As400Dialect()),
+    DERBY("DB", "Apache Derby", new DerbyDialect()),
+    HANADB("HD", "SAP HANADB", new HDBDialect()),
+    VectorWiseDB("VW", "VectorWiseDB", new VectorWiseDialect()),
+    TeraData("TR", "TeraData", new TeraDataDialect()),
+    Netezza("NT", "Netezza", new NetezzaDialect()),
+    Altibase("AL", "Altibase", new AltibaseDialect()),
+    Tibero("TI", "Tibero", new TiberoDialect()),
+    MySql("MS", "MySql", new MySqlDialect());
+
+    private String code;
+    private String description;
+    private SQLDialect dialect;
+}
+
+
+class MartTable <<model>> {
+    private String id;
+    private String name;
+    private String userKey1;
+    private MetaData metaData;
+    private MartStatus status = MartStatus.PENDING;
+    private int recordCount = 0;
+    private String scheduleingSyntax;
+    private Boolean clearYn;
+    private Boolean scheduleingYn;
+}
+
+class MetaData <<model>> <<cloneable>> <<Comparable>>{
+    private String id;
+    private String name;
+    private int recordCount = 0;
+    private String userKey1;
+    private MetaDataStatus status = MetaDataStatus.CREATED;
+    private JDBCResource resource;
+}
+
+enum MartStatus {
+
+}
+
+enum MetaDataStatus {
+    CREATED("Y"),
+    IN_USE("E");
+    
+    private String flag;
+}
+
+class JDBCResource {
+    private DatabaseType databaseType;
+    private String driverClassName;
+    private String url;
+    private String userName;
+    private String password;
+    private int initialSize = 3;
+    private int maxActive = 10;
+    private int maxIdle = 3;
+    private int maxWait = 60000;
+    private Boolean logAbandoned = false;
+    private Boolean removeAbandoned = false;
+    private int removeAbandonedTimeout = 300;
+    private String validationQuery;
+
+    public final getType();
+    private writeObject(ObjectOutputStream os);
+    private readObject(ObjectInputStream is);
+}
+
+abstract class AbstractResource {
+    private String id;
+    private String name;
+}
+
+interface Resource {
+    public String getId();
+    public String getName();
+    public ResourceType getType();
+}
+
+enum ResourceType {
+    JDBC("J", "jdbcResourceConnector", "\ub370\uc774\ud130\ubca0\uc774\uc2a4"),
+    XMLA("X", "xmlaResourceConnector", "OLAP(MDX/XMLA)"),
+    Mondrian("M", "mondrianResourceConnector", "OLAP(Mondrian)"),
+    JCO("C", "sapJCOResourceConnector", "SAP BW(JCO)"){JCOUtils.isSupported()}
+}
+
+class JCOUtils {
+    public static isJCOLibraryAvailable(); 
+    << Sap connect 가능여부 체크 >>
+}
+
+@enduml

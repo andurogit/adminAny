@@ -53,6 +53,7 @@ public class AdminPropertyOverrideConfigurer extends PropertyOverrideConfigurer 
     /**
      * override 
      */
+    @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException{
         File adminPropertiesPath = this.getAdminPropertiesPath();
         if(adminPropertiesPath != null) {
@@ -66,6 +67,7 @@ public class AdminPropertyOverrideConfigurer extends PropertyOverrideConfigurer 
     /**
      * override
      */
+    @Override
     protected void processProperties(ConfigurableListableBeanFactory benaFactoryToProcess, Properties props) throws BeansException {
         String[] beanNames;
         Enumeration<?> names = props.propertyNames();

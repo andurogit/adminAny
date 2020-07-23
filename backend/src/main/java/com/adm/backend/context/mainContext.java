@@ -126,6 +126,11 @@ public class mainContext {
     /**
      * as-is ibatis SqlMap Support 
      */
-    //@Bean(name = "sqlMapClinet")
-    
+    // @Bean(name = "sqlMapClinet")
+    // public ConfigurableSqlMapClientFactoryBean sqlMapClinet() {
+    //     ConfigurableSqlMapClientFactoryBean configurableSqlMapClientFactoryBean = new ConfigurableSqlMapClientFactoryBean();
+    //     configurableSqlMapClientFactoryBean.setConfigLocation(configLocation); // xml 있음...
+    //     configurableSqlMapClientFactoryBean.setDataSource(dataSource());
+    //     configurableSqlMapClientFactoryBean.setLobHandler(lobHandler); // 이거 implements 있음...
+    // }
 } 
