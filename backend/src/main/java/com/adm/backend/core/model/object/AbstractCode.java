@@ -75,11 +75,11 @@ public abstract class AbstractCode implements DataModel {
         int PRIME = 59;
         int result = 1;
         String $code = this.getCode();
-        result = result * 59 + ($code == null ? 43 : $code.hashCode());
+        result = result * PRIME + ($code == null ? 43 : $code.hashCode());
         String $name = this.getName();
-        result = result * 59 + ($name == null ? 43 : $name.hashCode());
+        result = result * PRIME + ($name == null ? 43 : $name.hashCode());
         Boolean $enabled = this.getEnabled();
-        result = result * 59 + ($enabled == null ? 43 : ((Object)$enabled).hashCode());
+        result = result * PRIME + ($enabled == null ? 43 : ((Object)$enabled).hashCode());
         return result;
     }
 

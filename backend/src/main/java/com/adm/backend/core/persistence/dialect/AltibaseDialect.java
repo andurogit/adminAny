@@ -5,6 +5,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.adm.backend.core.ddlutils.platform.altibase.AltibasePlatform;
+import com.adm.backend.core.persistence.dialect.lobhandler.AltibaseLobHandler;
+
 import org.apache.commons.dbcp.DelegatingCallableStatement;
 import org.apache.ddlutils.PlatformFactory;
 import org.springframework.jdbc.support.lob.LobHandler;

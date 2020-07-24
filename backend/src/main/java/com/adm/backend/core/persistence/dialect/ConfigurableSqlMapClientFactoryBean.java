@@ -16,13 +16,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import com.adm.backend.core.extension.SqlMapClientExtension;
-import com.adm.backend.core.persistence.cache.OSCacheController;
 import com.adm.backend.core.persistence.dialect.lobhandler.DelegatingLobHandler;
-import com.opensymphony.oscache.general.GeneralCacheAdministrator;
 
 import org.apache.commons.lang.NullArgumentException;
 import org.apache.ibatis.builder.xml.XMLMapperEntityResolver;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +37,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
-import org.apache.xalan.processor.TransformerFactoryImpl;
-
 public class ConfigurableSqlMapClientFactoryBean extends SqlSessionFactoryBean  {
     private static final Logger log = LoggerFactory.getLogger(ConfigurableSqlMapClientFactoryBean.class);
     private DataSource dataSource;
@@ -47,8 +44,8 @@ public class ConfigurableSqlMapClientFactoryBean extends SqlSessionFactoryBean  
 
     public ConfigurableSqlMapClientFactoryBean(){}
 
-    @Autowired
-    private GeneralCacheAdministrator cacheAdministrator;
+    // @Autowired
+    // private GeneralCacheAdministrator cacheAdministrator;
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -125,7 +122,8 @@ public class ConfigurableSqlMapClientFactoryBean extends SqlSessionFactoryBean  
                 if (!this.lobHandler.getDialect().supports(dbmsType)) {
                     // empty if block
                 }
-                OSCacheController.setCacheAdministrator(this.cacheAdministrator);
+                // mybatis 는 cache가 자동처리되므로 제거 처리
+                //OSCacheController.setCacheAdministrator(this.cacheAdministrator);
             
                 for (int i = 0; i < configLocations.length; ++i) {
                     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

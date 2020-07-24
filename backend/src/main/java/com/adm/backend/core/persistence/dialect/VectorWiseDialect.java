@@ -1,13 +1,13 @@
 /*
  * Decompiled with CFR 0.145.
  */
-package com.eyeq.kona.persistence.dialect;
+package com.adm.backend.core.persistence.dialect;
 
-import com.eyeq.kona.model.metadata.TableColumn;
-import com.eyeq.kona.persistence.dialect.AbstractSQLDialect;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.List;
+
+import com.adm.backend.core.model.metadata.TableColumn;
 
 public class VectorWiseDialect
 extends AbstractSQLDialect {

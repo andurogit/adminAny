@@ -90,6 +90,7 @@ dependencies {
     compile files('lib/ojdbc14.jar')
     //comnon utils
     compile files('lib/commons-dbcp-1.4.jar')
+    compile files('lib/commons-beanutils-1.9.3.jar')
     compile files('lib/ddlutils-1.0.jar')
     //jdbc
     compile files('lib/Altibase-jdbc-6.1.1.0.3.jar')

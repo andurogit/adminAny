@@ -1,5 +1,6 @@
 package com.adm.backend.context;
 
+import com.adm.backend.core.persistence.dialect.ConfigurableSqlMapClientFactoryBean;
 import com.zaxxer.hikari.HikariDataSource;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -7,8 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.factory.config.CustomEditorConfigurer;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -101,6 +105,8 @@ public class mainContext {
      * ClientDriver 가 없네 
      */
     @Bean(name = "dataSource")
+    @Primary
+    @ConfigurationProperties("spring.datasource.hikari")
     public HikariDataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource();
         //Properties props = new Properties();
@@ -124,13 +130,24 @@ public class mainContext {
     }
 
     /**
-     * as-is ibatis SqlMap Support 
+     * as-is ibatis SqlMap Support to-be mybatis
+     * 
+     * @throws Exception
      */
-    // @Bean(name = "sqlMapClinet")
-    // public ConfigurableSqlMapClientFactoryBean sqlMapClinet() {
-    //     ConfigurableSqlMapClientFactoryBean configurableSqlMapClientFactoryBean = new ConfigurableSqlMapClientFactoryBean();
-    //     configurableSqlMapClientFactoryBean.setConfigLocation(configLocation); // xml 있음...
-    //     configurableSqlMapClientFactoryBean.setDataSource(dataSource());
-    //     configurableSqlMapClientFactoryBean.setLobHandler(lobHandler); // 이거 implements 있음...
-    // }
+    @Bean(name = "sqlMapClinet")
+    @DependsOn(value = {"dataSource"})
+    public ConfigurableSqlMapClientFactoryBean sqlMapClinet() throws Exception {
+        ConfigurableSqlMapClientFactoryBean configurableSqlMapClientFactoryBean = new ConfigurableSqlMapClientFactoryBean();
+        //Resource clientConfig;
+        
+        // 캐쉬 사용
+        // 이렇게 하니까 dataSource 를 못 찾네...
+        //configurableSqlMapClientFactoryBean.getObject().getConfiguration().setCacheEnabled(true);
+        
+        // typehandler 들인데 일단 무시 하자
+        //configurableSqlMapClientFactoryBean.setConfigLocation(clientConfig); // xml 있음...
+        configurableSqlMapClientFactoryBean.setDataSource(dataSource());
+        //configurableSqlMapClientFactoryBean.setLobHandler(lobHandler); // 이거 implements 있음...
+        return configurableSqlMapClientFactoryBean;
+    }
 } 

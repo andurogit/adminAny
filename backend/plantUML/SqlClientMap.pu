@@ -122,9 +122,15 @@ SAPHanaDBPlatform *-- HDBDialect : use
 
 ' AltibaseDialect
 OracleDialect <|-- AltibaseDialect
+AltibasePaltform *-- AltibaseDialect : use
+AltibaseLobHandler *-- AltibaseDialect : use
 
 ' SybaseDialect
 SQLServerDialect <|-- SybaseDialect
+
+' MysqlDialect
+OracleDialect <|-- MySqlDialect
+MysqlLobHandler *-- MySqlDialect : use
 
 ' IllegalMartStatusException ( model )
 RuntimeException <|-- IllegalMartStatusException
@@ -154,6 +160,25 @@ ClauseType *-- MartTableItem
 springframework.LobHandler <|-- DelegatingLobHandler
 SQLDialect *-- DelegatingLobHandler : use
 
+' MysqlLobHandler
+springframework.DefaultLobHandler <|-- MysqlLobHandler : extends
+DelegatingLobHandler <|-- MysqlLobHandler : implements
+SQLDialect *-- MysqlLobHandler : use
+MySqlDialect *-- MysqlLobHandler : use
+java.sql.ResultSet *-- MysqlLobHandler : use
+java.sql.Clob *-- MysqlLobHandler : use
+java.io.Reader *-- MysqlLobHandler : use
+springframework.jdbc.LobCreator *-- MysqlLobHandler : use
+java.sql.PreparedStatement *-- MysqlLobHandler : use
+java.io.StringReader *-- MysqlLobHandler : use
+
+' AltibaseLobHandler
+springframework.DefaultLobHandler <|-- AltibaseLobHandler : extends
+DelegatingLobHandler <|-- AltibaseLobHandler : implements
+AltibaseDialect *-- AltibaseLobHandler : use
+java.sql.ResultSet *-- AltibaseLobHandler : use
+java.sql.Clob *-- AltibaseLobHandler : use
+
 ' --- DelegatingLobHandler --- end
 
 
@@ -166,7 +191,8 @@ org.w3c.dom.Document *-- SqlMapClientExtension : use
 
 ' --- ExtensionSupport --- end
 
-' SqlMapClientExtension
+
+
 
 
 ' ConfigurableSqlMapClientFactoryBean 시작점
@@ -187,6 +213,8 @@ OSCacheController *-- ConfigurableSqlMapClientFactoryBean : use
 com.ibatis.sqlmap.engine.cache.CacheController <|-- OSCacheController
 com.opensymphony.oscache.general.GeneralCacheAdministrator *-- OSCacheController
 
+
+
 ' *******
 ' sources
 ' *******
@@ -195,7 +223,7 @@ class OSCacheController {
     public GeneralCacheAdministrator;
 }
 
-class SqlMalClientExtension {
+class SqlMapClientExtension {
     public Document getConfigurationFragment();
 
 }

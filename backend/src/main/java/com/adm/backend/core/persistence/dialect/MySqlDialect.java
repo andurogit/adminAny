@@ -4,12 +4,13 @@
  * Could not load the following classes:
  *  org.springframework.jdbc.support.lob.LobHandler
  */
-package com.eyeq.kona.persistence.dialect;
+package com.adm.backend.core.persistence.dialect;
 
-import com.eyeq.kona.persistence.dialect.OracleDialect;
-import com.eyeq.kona.persistence.dialect.lobhandler.MysqlLobHandler;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+
+import com.adm.backend.core.persistence.dialect.lobhandler.MysqlLobHandler;
+
 import org.springframework.jdbc.support.lob.LobHandler;
 
 public class MySqlDialect
