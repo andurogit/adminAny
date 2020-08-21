@@ -12,10 +12,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.support.nativejdbc.SimpleNativeJdbcExtractor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -147,7 +149,18 @@ public class mainContext {
         // typehandler 들인데 일단 무시 하자
         //configurableSqlMapClientFactoryBean.setConfigLocation(clientConfig); // xml 있음...
         configurableSqlMapClientFactoryBean.setDataSource(dataSource());
-        //configurableSqlMapClientFactoryBean.setLobHandler(lobHandler); // 이거 implements 있음...
+        //configurableSqlMapClientFactoryBean.setLobHandler(lobHandler); // 이거 implements 있음... mybatis 에서는 result 에 선언하여 사용
         return configurableSqlMapClientFactoryBean;
     }
+
+    /**
+     * CommonsDbcpNativeJdbcExtractor ( deprecated )
+     */
+    @Bean(name = "nativeJdbcExtractor")
+    @Lazy(true)
+    public SimpleNativeJdbcExtractor nativeJdbcExtractor() {
+        return new SimpleNativeJdbcExtractor();
+    }
+
+    
 } 

@@ -109,7 +109,14 @@ dependencies {
     // common dbcp
     // compile group: 'org.openanzo.dependencies', name: 'org.apache.commons.dbcp', version: '1.2.2'
 
-    
+    // spring JDBC
+    compile group: 'org.springframework', name: 'spring-jdbc', version: '4.2.9.RELEASE'
+
+    // jgroups 
+    compile group: 'org.jgroups', name: 'jgroups', version: '4.1.9.Final'
+
+    // bena validation
+    compile group: 'javax.validation', name: 'validation-api', version: '1.0.0.GA'
 }
 
 test {
